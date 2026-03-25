@@ -1,0 +1,69 @@
+{
+  "name": "nodejs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "echo \"Run npm run dev:frontend and npm run dev:backend in separate terminals\"",
+    "build": "npm run build:frontend && npm run build:backend",
+    "build:all": "npm run build --workspaces --if-present",
+    "dev:frontend": "npm run build:validation && npm run dev --workspace frontend",
+    "dev:backend": "npm run build:validation && npm run dev --workspace backend",
+    "build:frontend": "npm run build --workspace frontend",
+    "build:backend": "npm run build --workspace backend",
+    "build:validation": "npm run build --workspace @repo/validation",
+    "prebuild": "npm run build:validation",
+    "prepare": "husky",
+    "lint": "npm run lint:frontend && npm run lint:backend && npm run lint:validation",
+    "lint:frontend": "npm run lint --workspace frontend",
+    "lint:backend": "eslint \"backend/src/**/*.ts\"",
+    "lint:validation": "eslint \"packages/validation/src/**/*.ts\"",
+    "typecheck": "npm run typecheck:frontend && npm run typecheck:backend && npm run typecheck:validation",
+    "typecheck:frontend": "npm run typecheck --workspace frontend",
+    "typecheck:backend": "npm run typecheck --workspace backend",
+    "typecheck:validation": "npm run typecheck --workspace @repo/validation",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "precommit:check": "lint-staged && npm run typecheck && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gmcoletti/node.js.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "PRIVATE",
+  "bugs": {
+    "url": "https://github.com/gmcoletti/node.js/issues"
+  },
+  "homepage": "https://github.com/gmcoletti/node.js#readme",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend",
+    "packages/validation"
+  ],
+  "devDependencies": {
+    "@eslint/js": "^9.39.4",
+    "eslint": "^9.39.4",
+    "globals": "^17.4.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.1",
+    "typescript-eslint": "^8.57.0"
+  },
+  "lint-staged": {
+    "frontend/**/*.{ts,tsx}": [
+      "eslint --fix --config frontend/eslint.config.js",
+      "prettier --write"
+    ],
+    "{backend,packages/validation}/**/*.ts": [
+      "eslint --fix --config eslint.config.mjs",
+      "prettier --write"
+    ],
+    "*.{json,md,css,html,yml,yaml}": [
+      "prettier --write"
+    ]
+  }
+}
